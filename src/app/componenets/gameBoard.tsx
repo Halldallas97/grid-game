@@ -1,51 +1,84 @@
 "use client";
 
-import { useMemo } from "react";
-import deceivePath, { pathFinder } from "../utils/pathHelper";
-import {colorClassMap, GridSpace, gridSpaceTypes, types } from "../utils/gridSpaceTypes";
+import { useEffect, useMemo, useState } from "react";
+import { deceivePathType, pathFinder } from "../utils/pathHelper";
+import { colorClassMap, GridSpace, gridSpaceTypes, types } from "../utils/gridSpaceTypes";
+import { postGridSpaces, todaysGameBoard, todaysGridExists } from "../utils/gridService";
 
 export default function GameGrid() {
     const grid = 50;
     const path = useMemo(() => pathFinder(grid), [grid]);
+    //check if a grid was made today
+    const [gridExists, setGridExists] = useState<boolean | null>(null);
+    //todo something wrong here I think may also be in the backend. 
+    const [spaces, setSpaces] = useState<GridSpace[][]>([]);
+
+    useEffect(() => {
+        const checkAndGenerateGrid = async () => {
+            const exists = await todaysGridExists();
+            setGridExists(exists);
+            const newGrid: GridSpace[][] = [];
+
+            if (!exists) {
+                for (let row = 0; row < grid; row++) {
+                    const rowArray: GridSpace[] = [];
+
+                    for (let col = 0; col < grid; col++) {
+                        let type: string;
+                        //check for start
+                        if (row === 0 && col === 0) {
+                            type = "A";
+                            //check for end
+                        } else if (row === grid - 1 && col === grid - 1) {
+                            type = "B";
+                            //bonus health 
+                        } else if (row === 25 && col === 25) {
+                            type = "Fruit";
+                            //use weight to decieve path
+                        } else if (path.has(`${row}-${col}`)) {
+                            type = deceivePathType();
+                            //fill rest of spaces 
+                        } else {
+                            type = types[Math.floor(Math.random() * types.length)];
+                        }
+
+                        const base = gridSpaceTypes[type];
+                        const space: GridSpace = { ...base, type };
+
+                        rowArray.push(space);
+                    }
+
+                    newGrid.push(rowArray);
+                }
+                setSpaces(newGrid);
+                await postGridSpaces(newGrid);
+            } else {
+                // Get the grid that was previously stored in the database.
+                const data = await todaysGameBoard();
+                setSpaces(data);
+            }
+
+        };
+
+        checkAndGenerateGrid();
+    }, [grid, path]);
+
+    if (gridExists === null) return <div className="text-white">Loading...</div>;
+
+    const displayGrid = spaces.length > 0 ? spaces : Array.from({ length: grid }, () =>
+        Array.from({ length: grid }, () => gridSpaceTypes["Empty"]));
 
     return (
         <div className="flex items-center justify-center h-screen w-screen bg-black overflow-auto">
-            <div
-                className="grid bg-transparent grid-cols-50">
-                {Array.from({ length: grid * grid }, (_, i) => {
-                    const row = Math.floor(i / grid);
-                    const col = i % grid;
-
-                    let space: GridSpace;
-                    // check for starting point
-                    if (row === 0 && col === 0) {
-                        space = gridSpaceTypes["A"]
-                    }
-                    // check for end point
-                    else if (row === grid - 1 && col === grid - 1) {
-                        space = gridSpaceTypes["B"]
-                    }
-                    //Fruit in the middle of the grid to motivate players to keep going if they're low on health or stamina.
-                    else if (row === 25 && col === 25) {
-                        space = gridSpaceTypes["Fruit"]
-                    }
-                    else if (path.has(`${row}-${col}`)) {
-                        space = deceivePath(gridSpaceTypes)
-                    }
-                    // we need to set the color to signify to the user what will happen if the user goes to that location. 
-                    else {
-                        //call external function to generate a winning path..
-                        const randomType = types[Math.floor(Math.random() * types.length)];
-                        space = gridSpaceTypes[randomType];
-                    }
-                    return (
+            <div className="grid bg-transparent grid-cols-50">
+                {displayGrid.flatMap((row, rowIndex) =>
+                    row.map((space, colIndex) => (
                         <div
-                            key={`${row}-${col}`}
+                            key={`${rowIndex}-${colIndex}`}
                             className={`w-5 h-5 flex items-center justify-center text-xs border border-black ${colorClassMap[space.color]}`}
-                        >
-                        </div>
-                    );
-                })}
+                        />
+                    ))
+                )}
             </div>
         </div>
     );

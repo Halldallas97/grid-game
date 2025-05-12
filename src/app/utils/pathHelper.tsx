@@ -54,16 +54,12 @@ export function pathFinder(grid: number): Set<string> {
 }
 */
 
-export default function deceivePath(gridSpaceTypes: Record<string, GridSpace>) {
+export function deceivePathType(): string {
     //added weight here to make sure the path is not as easily identifiable. 
     const weight = [
         "Blank", "Blank", "Blank", "Blank", "Blank", "Blank", "Blank", "Blank", "Blank",
         "Speeder", "Mud"
-
     ];
 
-    // return gridSpaceTypes["Blank"];
-    return gridSpaceTypes[weight[Math.floor(Math.random() * weight.length)]];
-
-
+    return weight[Math.floor(Math.random() * weight.length)];
 }
