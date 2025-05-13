@@ -53,7 +53,7 @@ export default function GameGrid() {
 
     const displayGrid = spaces.length > 0 ? spaces : Array.from(
         { length: grid },
-        () => Array.from({ length: grid }, () => gridSpaceTypes["Empty"])
+        () => Array.from({ length: grid }, () => gridSpaceTypes["Blank"])
     );
 
     return (
