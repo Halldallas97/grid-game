@@ -50,3 +50,8 @@ export const colorClassMap: Record<Color, string> = {
     blue: "bg-blue-400",
     gold: "bg-yellow-300"
 };
+
+export type ReturnedGrid = GridSpace & {
+    row: number;
+    col: number;
+};

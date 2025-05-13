@@ -1,10 +1,12 @@
-import { GridSpace } from "./gridSpaceTypes";
+import { todaysGameBoard } from "./gridService";
+import { GridSpace, gridSpaceTypes, ReturnedGrid, types } from "./gridSpaceTypes";
 
-/*
-I'll be honest, I used chatgpt to help with the functionality here to solve the issue of finding a path. 
-I wasnt able to ensure that there would always be a path to the finish line with my implementation, and given 
-time constraints and general sanity without a team for support I used their solution. below commented out is my implemenation check readme for results. 
-*/
+/**
+ * I'll be honest, I used chatgpt to help with the functionality here to solve the issue of finding a path. 
+ * I wasnt able to ensure that there would always be a path to the finish line with my implementation, and given 
+ * time constraints and general sanity without a team for support I used their solution.
+ */
+
 export function pathFinder(grid: number): Set<string> {
     const path = new Set<string>();
     let row = 0;
@@ -63,3 +65,5 @@ export function deceivePathType(): string {
 
     return weight[Math.floor(Math.random() * weight.length)];
 }
+
+

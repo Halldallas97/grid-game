@@ -1,72 +1,60 @@
 "use client";
-
 import { useEffect, useMemo, useState } from "react";
-import { deceivePathType, pathFinder } from "../utils/pathHelper";
-import { colorClassMap, GridSpace, gridSpaceTypes, types } from "../utils/gridSpaceTypes";
-import { postGridSpaces, todaysGameBoard, todaysGridExists } from "../utils/gridService";
+import { pathFinder } from "../utils/pathUtil";
+import { colorClassMap, GridSpace, gridSpaceTypes } from "../utils/gridSpaceTypes";
+import { postGridSpaces, todaysGridExists } from "../utils/gridService";
+import { generateNewGrid, loadExistingGrid } from "../utils/gridUtils"; 
 
 export default function GameGrid() {
     const grid = 50;
     const path = useMemo(() => pathFinder(grid), [grid]);
-    //check if a grid was made today
     const [gridExists, setGridExists] = useState<boolean | null>(null);
-    //todo something wrong here I think may also be in the backend. 
     const [spaces, setSpaces] = useState<GridSpace[][]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
+/**
+ * Use effect to render the gameboard 
+ * first it checks to see if there was already a board created for the day 
+ * if not then we generate a board that goes to the backend (written in Java) 
+ * now each everyone plays the same game. This can be useful for daily leaderboards etc. 
+ */
     useEffect(() => {
         const checkAndGenerateGrid = async () => {
-            const exists = await todaysGridExists();
-            setGridExists(exists);
-            const newGrid: GridSpace[][] = [];
+            setIsLoading(true);
+            try {
+                //check that their is a grid in the db, if not we will create it 
+                const exists = await todaysGridExists();
+                setGridExists(exists);
 
-            if (!exists) {
-                for (let row = 0; row < grid; row++) {
-                    const rowArray: GridSpace[] = [];
-
-                    for (let col = 0; col < grid; col++) {
-                        let type: string;
-                        //check for start
-                        if (row === 0 && col === 0) {
-                            type = "A";
-                            //check for end
-                        } else if (row === grid - 1 && col === grid - 1) {
-                            type = "B";
-                            //bonus health 
-                        } else if (row === 25 && col === 25) {
-                            type = "Fruit";
-                            //use weight to decieve path
-                        } else if (path.has(`${row}-${col}`)) {
-                            type = deceivePathType();
-                            //fill rest of spaces 
-                        } else {
-                            type = types[Math.floor(Math.random() * types.length)];
-                        }
-
-                        const base = gridSpaceTypes[type];
-                        const space: GridSpace = { ...base, type };
-
-                        rowArray.push(space);
-                    }
-
-                    newGrid.push(rowArray);
+                if (!exists) {
+                    // create a new grid if one doesn't exist
+                    const newGrid = generateNewGrid(grid, path);
+                    setSpaces(newGrid);
+                    await postGridSpaces(newGrid);
+                } else {
+                    // Get the grid that was previously stored in the database
+                    const loadedGrid = await loadExistingGrid(grid);
+                    setSpaces(loadedGrid);
                 }
-                setSpaces(newGrid);
-                await postGridSpaces(newGrid);
-            } else {
-                // Get the grid that was previously stored in the database.
-                const data = await todaysGameBoard();
-                setSpaces(data);
+            } catch (error) {
+                console.error("Error loading or generating grid:", error);
+            } finally {
+                setIsLoading(false);
             }
-
         };
 
         checkAndGenerateGrid();
     }, [grid, path]);
 
-    if (gridExists === null) return <div className="text-white">Loading...</div>;
+    //loading text while getting or creating grid
+    if (isLoading || gridExists === null) {
+        return <div className="text-white">Loading...</div>;
+    }
 
-    const displayGrid = spaces.length > 0 ? spaces : Array.from({ length: grid }, () =>
-        Array.from({ length: grid }, () => gridSpaceTypes["Empty"]));
+    const displayGrid = spaces.length > 0 ? spaces : Array.from(
+        { length: grid },
+        () => Array.from({ length: grid }, () => gridSpaceTypes["Empty"])
+    );
 
     return (
         <div className="flex items-center justify-center h-screen w-screen bg-black overflow-auto">
