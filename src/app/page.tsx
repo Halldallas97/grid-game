@@ -1,6 +1,5 @@
 "use client";
-import Link from "next/link";
-import GameGrid from "./componenets/gameBoard";
+import GameGrid from "./components/gameBoard";
 import { useUser } from "./context/userContext";
 
 export default function Home() {
