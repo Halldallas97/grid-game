@@ -1,4 +1,5 @@
 export interface GridSpace {
+    Traversed: boolean; 
     Health: number;
     Moves: number;
     color: Color;
@@ -10,31 +11,38 @@ export type Color = 'green' | 'transparent' | 'brown' | 'red' | 'blue' | 'white'
 export const gridSpaceTypes: Record<string, GridSpace> = {
     A: {
         Health: 0, Moves: 0, color: 'green',
-        type: ""
+        type: "Blank",
+        Traversed: false
     },
     B: {
-        Health: 0, Moves: 0, color: 'transparent',
-        type: ""
+        Health: 0, Moves: 0, color: 'green',
+        type: "",
+        Traversed: false
     },
     Blank: {
         Health: 0, Moves: -1, color: 'white',
-        type: ""
+        type: "Blank",
+        Traversed: false
     },
     Speeder: {
         Health: -5, Moves: 0, color: 'blue',
-        type: ""
+        type: "",
+        Traversed: false
     },
     Lava: {
         Health: -50, Moves: -10, color: 'red',
-        type: ""
+        type: "",
+        Traversed: false
     },
     Mud: {
         Health: -10, Moves: -5, color: 'brown',
-        type: ""
+        type: "",
+        Traversed: false
     },
     Fruit: {
         Health: 50, Moves: 5, color: 'gold',
-        type: ""
+        type: "",
+        Traversed: false
     },
 
 };
@@ -45,7 +53,7 @@ export const colorClassMap: Record<Color, string> = {
     green: "bg-green-600",
     transparent: "bg-transparent",
     white: "bg-white",
-    brown: "bg-yellow-900",
+    brown: "bg-yellow-700",
     red: "bg-red-600",
     blue: "bg-blue-400",
     gold: "bg-yellow-300"
