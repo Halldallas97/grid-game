@@ -21,16 +21,14 @@ export default function Home() {
         </div>
 
       ) : (
-        <div className="flex h-screen w-screen bg-black overflow-hidden">
-          <div className="w-1/3 h-full flex items-center justify-center p-4">
-            <div className="w-1/2 h-1/2  outline-1 rounded-lg flex  justify-center text-white">
-              <div className="p-4">
-                <SideBar/>
-              </div>
+        <div className="flex flex-wrap h-screen w-screen bg-black overflow-auto">
+          <div className="w-full md:w-1/3 flex items-center justify-center p-4">
+            <div className="outline-1 rounded-lg text-white p-4">
+              <SideBar />
             </div>
           </div>
 
-          <div className="w-2/3 h-full mt-10 flex items-center justify-center overflow-auto">
+          <div className="w-full md:w-2/3 h-full flex mt-16 items-center justify-center p-4">
             <GameGrid />
           </div>
         </div>

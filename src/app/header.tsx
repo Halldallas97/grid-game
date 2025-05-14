@@ -8,7 +8,7 @@ export default function Header() {
     const { health, moves } = useUser();
 
     return (
-        <div className="fixed bg-gradient-to-b from-gray-700 to-black  w-full p-4 flex flex-col justify-between h-auto">
+        <div className="relative bg-gradient-to-b from-gray-700 to-black  w-full p-4 flex flex-col justify-between h-auto">
             <div className="absolute top-4 right-4 flex gap-4 text-white">
                 <div className="flex items-center">
                     <span className="mr-2">Health: {health}</span>
