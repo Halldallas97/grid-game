@@ -16,9 +16,6 @@ export const generateNewGrid = (gridSize: number, pathSet: Set<string>): GridSpa
                 // Check for end
             } else if (row === gridSize - 1 && col === gridSize - 1) {
                 type = "B";
-                // Bonus health
-            } else if (row === 25 && col === 25) {
-                type = "Fruit";
                 // Use weight to deceive path
             } else if (pathSet.has(`${row}-${col}`)) {
                 type = deceivePathType();
