@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+##Grid-Game 
 
-## Getting Started
+Welcome, to my 2D based game. The objective of this game is to get from point A to point B on a 50x50 board using arrow keys
 
-First, run the development server:
+### Getting Started 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+To run the frontend locally: 
+npm install 
+npm run dev 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App will launch on http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Backend API (Optional) 
+This game has an optional backend api which ensures that the user always plays the same board for the day. 
+Lint to repository: https://github.com/Halldallas97/dallas-grid-game-backend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Objective
+You start with 200 Health and 450 Moves.
+Each grid tile affects your health and movement differently:
+“Blank”: {“Health”: 0, “Moves”: -1},
+“Speeder”: {“Health”: -5, “Moves”: 0},
+“Lava”: {“Health”: -50, “Moves”: -10},
+“Mud”: {“Health”: -10, “Moves”: -5},
 
-## Learn More
+###Requirements
+Built using a modern front-end framework (e.g., React).
+Arrow key controls for user input.
+Ensure that the game is winnable
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+###Submission notes: 
+Hey, thanks for making it this far. I hope you enjoy playing my game! 
+Some current limitations and known issues:
+User login and user data retrieval are not yet implemented.
+Win screen has not yet been rendered.
+Known bug: Once a tile is traversed, it should no longer deal damage and should be treated as a “Blank” tile this is a work in progress.
