@@ -1,4 +1,4 @@
-###Grid-Game 
+## Grid-Game 
 
 Welcome, to my 2D based game. The objective of this game is to get from point A to point B on a 50x50 board using arrow keys
 
