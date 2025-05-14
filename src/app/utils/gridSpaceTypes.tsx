@@ -15,7 +15,7 @@ export const gridSpaceTypes: Record<string, GridSpace> = {
         Traversed: false
     },
     B: {
-        Health: 0, Moves: 0, color: 'green',
+        Health: 0, Moves: 0, color: 'gold',
         type: "",
         Traversed: false
     },
@@ -39,12 +39,6 @@ export const gridSpaceTypes: Record<string, GridSpace> = {
         type: "",
         Traversed: false
     },
-    Fruit: {
-        Health: 50, Moves: 5, color: 'gold',
-        type: "",
-        Traversed: false
-    },
-
 };
 export const types = ["Blank", "Speeder", "Lava", "Mud"];
 
