@@ -30,7 +30,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Game Grid Container - 66% of the screen */}
           <div className="w-2/3 h-full flex items-center justify-center overflow-auto">
             <GameGrid />
           </div>
