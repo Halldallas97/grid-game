@@ -15,7 +15,7 @@ export default function Home() {
               You Died, Better Luck Next Time.
             </div>
             <button className="hover:text-gray-400" onClick={() => window.location.reload()}>
-              Restart
+              Try Again
             </button>
           </div>
         </div>
@@ -30,7 +30,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w-2/3 h-full flex items-center justify-center overflow-auto">
+          <div className="w-2/3 h-full mt-10 flex items-center justify-center overflow-auto">
             <GameGrid />
           </div>
         </div>

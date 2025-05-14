@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { pathFinder } from "../utils/pathUtil";
 import { colorClassMap, GridSpace, gridSpaceTypes, Color } from "../utils/gridSpaceTypes";
 import { postGridSpaces, todaysGridExists } from "../utils/gridService";
-import { generateNewGrid, loadExistingGrid} from "../utils/gridUtils";
+import { generateNewGrid, loadExistingGrid } from "../utils/gridUtils";
 import { useUser } from "../context/userContext";
 
 export default function GameGrid() {
@@ -16,11 +16,11 @@ export default function GameGrid() {
     const [row, col] = position;
     const { updateHealth, updateMoves } = useUser();
 
-    
+
     const keyInput = (event: KeyboardEvent) => {
         event.preventDefault();
         let newPos: [number, number] = [...position] as [number, number];
-        
+
         switch (event.key) {
             case "ArrowUp":
                 if (row > 0) newPos = [row - 1, col];
@@ -43,11 +43,11 @@ export default function GameGrid() {
             //before setting to type a get the current space
             const currentSpace = updatedSpaces[newPos[0]][newPos[1]];
             const currentType = currentSpace.type;
-            
+
             // Update health and moves based on the space values
             updateHealth(currentSpace.Health);
             updateMoves(currentSpace.Moves);
-            
+
             //set the current position traversed to green. 
             //todo update type here so that the user only takes blank damage... 
             const updatedSpace: GridSpace = {
@@ -115,18 +115,37 @@ export default function GameGrid() {
     );
 
     return (
-        <div className="flex items-center justify-center h-screen w-screen bg-black overflow-auto">
-            <div className="grid bg-transparent grid-cols-50">
-                {displayGrid.flatMap((row, rowIndex) =>
-                    row.map((space, colIndex) => (
-                        <div
-                            key={`${rowIndex}-${colIndex}`}
-                            className={`w-5 h-5 flex items-center justify-center text-xs border border-black ${colorClassMap[space.color]}
+        <>
+            {position[0] === 49 && position[1] === 49 ? (
+                <div className="flex items-center justify-center h-screen">
+                    <div className="flex flex-col items-center text-center text-white space-y-6">
+                        <div className="text-3xl">
+                            You Win.
+                        </div>
+                        <button className="hover:text-gray-400" onClick={() => window.location.reload()}>
+                            Play Again?
+                        </button>
+                    </div>
+                </div>
+            )
+                : (
+                    <div className="flex items-center justify-center h-screen w-screen bg-black overflow-auto">
+                        <div className="grid bg-transparent grid-cols-50">
+                            {displayGrid.flatMap((row, rowIndex) =>
+                                row.map((space, colIndex) => (
+                                    <div
+                                        key={`${rowIndex}-${colIndex}`}
+                                        className={`w-5 h-5 flex items-center justify-center text-xs border border-black ${colorClassMap[space.color]}
                             ${rowIndex === position[0] && colIndex === position[1] ? 'opacity-35' : ''}`}
-                        />
-                    ))
+                                    />
+                                ))
+                            )}
+                        </div>
+                    </div>
                 )}
-            </div>
-        </div>
+
+        </>
+
     );
+
 }
