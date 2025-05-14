@@ -1,6 +1,3 @@
-import { todaysGameBoard } from "./gridService";
-import { GridSpace, gridSpaceTypes, ReturnedGrid, types } from "./gridSpaceTypes";
-
 /**
  * I'll be honest, I used chatgpt to help with the functionality here to solve the issue of finding a path. 
  * I wasnt able to ensure that there would always be a path to the finish line with my implementation, and given 
